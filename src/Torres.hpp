@@ -1,8 +1,6 @@
 #ifndef TORRES_HPP
 #define TORRES_HPP
 
-#include "Loja.hpp"
-
 class Torres
 {
 private:
