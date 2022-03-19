@@ -1,8 +1,6 @@
 #ifndef JOGADOR_HPP
 #define JOGADOR_HPP
 
-#include "Torres.hpp"
-
     class Jogador
     {
     private:
