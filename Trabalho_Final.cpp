@@ -185,7 +185,7 @@ int main(){
 		al_clear_to_color(al_map_rgb(0,0,0));
 		if(ev.type == ALLEGRO_EVENT_TIMER){
 			cout << "timer" << endl;
-			if(Pos_x <= SCREEN_W/2){
+			if(Pos_x <= SCREEN_W/2+10){
 				Pos_x += BOUNCER_SIZE;
 			}
 			else if(Pos_x >= SCREEN_W/2 && Ctr_tst <= 3){
@@ -194,13 +194,13 @@ int main(){
 			}
 			else{
 				Pos_x += BOUNCER_SIZE;
-			}			
+			}
 		}
 	}
 	
 
 	//FINALIZACOE DO PROGRAMA
 	al_destroy_display(display);
-	al_destroy_event_queue(Fila_Eventos); 
+	al_destroy_event_queue(Fila_Eventos);
 	return 0;
 }
