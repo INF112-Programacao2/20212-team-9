@@ -60,7 +60,7 @@ int main(){
     }
 	
 	
-	
+	//criacao do mapa
 	Mapa = al_load_bitmap("Mapa_Final_p.bmp");
 	
 	if(!Mapa){
