@@ -26,6 +26,13 @@ public:
     void setPos_y(int pos_y);
     int getAlcance();
     void setAlcance(int alcance);
+    /*int getPreco_tipo1();
+    int getPreco_tipo2();
+    int getPreco_tipo3();*/
+    static const int _preco_torre_1 = 100;
+    static const int _preco_torre_2 = 100;
+    static const int _preco_torre_3 = 100;
+
 };
 
 #endif

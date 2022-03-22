@@ -20,19 +20,20 @@ void Torre::setTipo(int tipo){
     if(tipo == 1)
     {
         _dano = 10;
-        _preco = 100;
+        _preco = _preco_torre_1;
+        _alcance = 200;
     }
 
     if(tipo == 2)
     {
         _dano = 20;
-        _preco = 200;
+        _preco = _preco_torre_2;
     }
 
     if(tipo == 3)
     {
         _dano = 30;
-        _preco = 300;
+        _preco = _preco_torre_3;
     }
 }
 

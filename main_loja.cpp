@@ -2,14 +2,17 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_font.h>
 #include "Torre.hpp"
+#include "Jogador.hpp"
 
 enum MYKEYS
 {
     KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
 };
 
-//Variáveis globais do jogo
+//Variáveis globais do jogo======
 const float FPS = 45;
 const int SCREEN_W = 1200;
 const int SCREEN_H = 572;
@@ -24,8 +27,9 @@ bool redraw = true;
 bool sair = false;
 int cursor_x, cursor_y;
 bool cima, baixo, esq, dir;
+//Variáveis globais do jogo======
 
-//LOJA***************************
+//LOJA===========================
 ALLEGRO_BITMAP *fundo_loja = NULL;
 ALLEGRO_BITMAP *icone_torre1 = NULL;
 ALLEGRO_BITMAP *tower1 = NULL;
@@ -39,7 +43,7 @@ const int tower1_y_size = 208;
 int pos_x_tower1;
 int pos_y_tower1;
 
-bool arrastar_torre = false;
+bool arrastar_torre1 = false;
 
 void desenhar_loja()
 {
@@ -48,7 +52,7 @@ void desenhar_loja()
 }
 //===============================
 
-//Torres=========================
+//TORRES=========================
 Torre torres[20];
 int num_torres = 0;
 
@@ -60,7 +64,7 @@ void desenhar_torres()
             al_draw_bitmap(tower1, torres[i].getPos_x(), torres[i].getPos_y(), 0);
     }
 
-    if(arrastar_torre)
+    if(arrastar_torre1)
             {
                 if(cursor_x < 1000 /*Largura do mapa*/)
                     al_draw_circle(cursor_x, cursor_y, 200, al_map_rgb(254,254,254), 3.0);
@@ -69,6 +73,20 @@ void desenhar_torres()
                 al_draw_bitmap(tower1, cursor_x-(tower1_x_size/2), cursor_y-(tower1_y_size/2), 0);
             }
 
+}
+//===============================
+
+//JOGADOR========================
+Jogador jogador(100, 300);
+ALLEGRO_BITMAP *jogador_HUD = NULL;
+ALLEGRO_FONT *vida_jogador = NULL;
+ALLEGRO_FONT *ouro_jogador = NULL;
+
+void desenhar_HUD()
+{
+    al_draw_bitmap(jogador_HUD,0,0,0);
+    al_draw_textf(vida_jogador, al_map_rgb(255,255,255), 75, 20, 0, "%d", jogador.getVida());
+    al_draw_textf(ouro_jogador, al_map_rgb(255,255,255), 245, 20, 0, "%d", jogador.getOuro());
 }
 //===============================
 
@@ -83,6 +101,18 @@ int inicializar_allegro()
     if(!al_init_primitives_addon())
     {
         std::cout << "Falha ao carregar primitives" << std::endl;
+        return 0;
+    }
+
+    if(!al_init_font_addon())
+    {
+        std::cout << "Falha ao carregar Fonte" << std::endl;
+        return 0;
+    }
+
+    if(!al_init_ttf_addon())
+    {
+        std::cout << "Falha ao carregar ttf" << std::endl;
         return 0;
     }
 
@@ -151,6 +181,28 @@ int inicializar_allegro()
     }
     al_convert_mask_to_alpha(tower1, al_map_rgb(255, 255, 255));
 
+    jogador_HUD = al_load_bitmap("jogador_HUD.bmp");
+    if(!jogador_HUD) {
+        std::cout << "Falha ao carregar jogador_HUD!" << std::endl;
+        al_destroy_display(display);
+        return 0;
+    }
+    al_convert_mask_to_alpha(jogador_HUD, al_map_rgb(255, 255, 255));
+
+    vida_jogador = al_load_font("arial.ttf", 36, 0);
+    if(!vida_jogador) {
+        std::cout << "Falha ao carregar vida_jogador!" << std::endl;
+        al_destroy_display(display);
+        return 0;
+    }
+
+    ouro_jogador = al_load_font("arial.ttf", 36, 0);
+    if(!ouro_jogador) {
+        std::cout << "Falha ao carregar ouro_jogador!" << std::endl;
+        al_destroy_display(display);
+        return 0;
+    }
+
     event_queue = al_create_event_queue();
     if(!event_queue)
     {
@@ -174,8 +226,6 @@ int inicializar_allegro()
 }
 
 int main() {
-
-    //Jogador j1(10, 100);
 
     if(!inicializar_allegro())
         return -1;
@@ -201,23 +251,24 @@ int main() {
         {
             if(ev.mouse.button && pos_x_icone_torre1<=cursor_x &&
             cursor_x<= pos_x_icone_torre1+140 && pos_y_icone_torre1<=cursor_y &&
-            cursor_y<=pos_y_icone_torre1+190)
+            cursor_y<=pos_y_icone_torre1+190 && jogador.isPossivel(Torre::_preco_torre_1))
             {
-                arrastar_torre = true;
+                arrastar_torre1 = true;
             }
 
         }
 
-        else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && arrastar_torre)
+        else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && arrastar_torre1)
         {
             if(ev.mouse.button)
             {
-                arrastar_torre = false;
+                arrastar_torre1 = false;
                 if(cursor_x+(tower1_x_size/2) < 1000 /*Dimanesão x do mapa*/)
                 {
                     torres[num_torres].setTipo(1);
                     torres[num_torres].setPos_x(cursor_x-(tower1_x_size/2));
                     torres[num_torres].setPos_y(cursor_y-(tower1_y_size/2));
+                    jogador.pagar(torres[num_torres].getPreco());
                     num_torres++;
                 }
             } 
@@ -230,6 +281,7 @@ int main() {
             al_draw_bitmap(mapa,0,0,0);
             desenhar_loja();
             desenhar_torres();
+            desenhar_HUD();
             al_flip_display();
         }
     }
@@ -238,6 +290,9 @@ int main() {
     al_destroy_bitmap(fundo_loja);
     al_destroy_bitmap(icone_torre1);
     al_destroy_bitmap(tower1);
+    al_destroy_bitmap(jogador_HUD);
+    al_destroy_font(vida_jogador);
+    al_destroy_font(ouro_jogador);
     al_destroy_timer(timer);
     al_destroy_display(display);
     al_destroy_event_queue(event_queue);
