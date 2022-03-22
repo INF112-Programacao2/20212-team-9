@@ -2,6 +2,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
+#include "Torre.hpp"
 
 enum MYKEYS
 {
@@ -24,7 +25,7 @@ bool sair = false;
 int cursor_x, cursor_y;
 bool cima, baixo, esq, dir;
 
-//Variáveis da loja
+//LOJA***************************
 ALLEGRO_BITMAP *fundo_loja = NULL;
 ALLEGRO_BITMAP *icone_torre1 = NULL;
 ALLEGRO_BITMAP *tower1 = NULL;
@@ -40,11 +41,48 @@ int pos_y_tower1;
 
 bool arrastar_torre = false;
 
+void desenhar_loja()
+{
+    al_draw_bitmap(fundo_loja,1000,0,0);
+    al_draw_bitmap(icone_torre1, pos_x_icone_torre1, pos_y_icone_torre1,0);
+}
+//===============================
+
+//Torres=========================
+Torre torres[20];
+int num_torres = 0;
+
+void desenhar_torres()
+{
+    for(int i=0; i<num_torres; i++)
+    {
+        if(torres[i].getTipo() == 1)
+            al_draw_bitmap(tower1, torres[i].getPos_x(), torres[i].getPos_y(), 0);
+    }
+
+    if(arrastar_torre)
+            {
+                if(cursor_x < 1000 /*Largura do mapa*/)
+                    al_draw_circle(cursor_x, cursor_y, 200, al_map_rgb(254,254,254), 3.0);
+                    
+                desenhar_loja();
+                al_draw_bitmap(tower1, cursor_x-(tower1_x_size/2), cursor_y-(tower1_y_size/2), 0);
+            }
+
+}
+//===============================
+
 int inicializar_allegro()
 {
     if(!al_init())
     {
         std::cout << "Falha ao carregar Allegro" << std::endl;
+        return 0;
+    }
+
+    if(!al_init_primitives_addon())
+    {
+        std::cout << "Falha ao carregar primitives" << std::endl;
         return 0;
     }
 
@@ -111,6 +149,7 @@ int inicializar_allegro()
         al_destroy_display(display);
         return 0;
     }
+    al_convert_mask_to_alpha(tower1, al_map_rgb(255, 255, 255));
 
     event_queue = al_create_event_queue();
     if(!event_queue)
@@ -132,18 +171,6 @@ int inicializar_allegro()
     al_start_timer(timer);
 
     return 1;
-}
-
-//Torres
-int coords_torres[10][2];
-int num_torres = 0;
-
-void desenhar_torres()
-{
-    for(int i=0; i<num_torres; i++)
-    {
-        al_draw_bitmap(tower1, coords_torres[i][0], coords_torres[i][1], 0);
-    }
 }
 
 int main() {
@@ -188,8 +215,9 @@ int main() {
                 arrastar_torre = false;
                 if(cursor_x+(tower1_x_size/2) < 1000 /*Dimanesão x do mapa*/)
                 {
-                    coords_torres[num_torres][0] = cursor_x-(tower1_x_size/2);
-                    coords_torres[num_torres][1] = cursor_y-(tower1_y_size/2);
+                    torres[num_torres].setTipo(1);
+                    torres[num_torres].setPos_x(cursor_x-(tower1_x_size/2));
+                    torres[num_torres].setPos_y(cursor_y-(tower1_y_size/2));
                     num_torres++;
                 }
             } 
@@ -198,18 +226,10 @@ int main() {
         if(redraw && al_is_event_queue_empty(event_queue))
         {
             redraw = false;
-
             al_clear_to_color(al_map_rgb(0,0,0));
             al_draw_bitmap(mapa,0,0,0);
-            al_draw_bitmap(fundo_loja,1000,0,0);
-            //al_convert_mask_to_alpha(icone_torre1, al_map_rgb(255, 255, 255));
-            al_draw_bitmap(icone_torre1, pos_x_icone_torre1, pos_y_icone_torre1,0);
-
-            if(arrastar_torre)
-                al_draw_bitmap(tower1, cursor_x-(tower1_x_size/2), cursor_y-(tower1_y_size/2), 0);
-
+            desenhar_loja();
             desenhar_torres();
-
             al_flip_display();
         }
     }
