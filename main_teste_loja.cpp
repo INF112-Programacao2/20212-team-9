@@ -134,7 +134,6 @@ int inicializar_allegro()
     return 1;
 }
 
-
 //Torres
 int coords_torres[10][2];
 int num_torres = 0;
@@ -146,7 +145,6 @@ void desenhar_torres()
         al_draw_bitmap(tower1, coords_torres[i][0], coords_torres[i][1], 0);
     }
 }
-
 
 int main() {
 
@@ -188,11 +186,13 @@ int main() {
             if(ev.mouse.button)
             {
                 arrastar_torre = false;
-                coords_torres[num_torres][0] = cursor_x-(tower1_x_size/2);
-                coords_torres[num_torres][1] = cursor_y-(tower1_y_size/2);
-                num_torres++;
-            }
-                
+                if(cursor_x+(tower1_x_size/2) < 1000 /*Dimanesão x do mapa*/)
+                {
+                    coords_torres[num_torres][0] = cursor_x-(tower1_x_size/2);
+                    coords_torres[num_torres][1] = cursor_y-(tower1_y_size/2);
+                    num_torres++;
+                }
+            } 
         }
 
         if(redraw && al_is_event_queue_empty(event_queue))
@@ -212,7 +212,6 @@ int main() {
 
             al_flip_display();
         }
-
     }
 
     al_destroy_bitmap(mapa);
