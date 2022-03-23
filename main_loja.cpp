@@ -67,7 +67,7 @@ void desenhar_torres()
     if(arrastar_torre1)
             {
                 if(cursor_x < 1000 /*Largura do mapa*/)
-                    al_draw_circle(cursor_x, cursor_y, 200, al_map_rgb(254,254,254), 3.0);
+                    al_draw_circle(cursor_x, cursor_y, Torre::_alcance_torre_1, al_map_rgb(254,254,254), 3.0);
                     
                 desenhar_loja();
                 al_draw_bitmap(tower1, cursor_x-(tower1_x_size/2), cursor_y-(tower1_y_size/2), 0);

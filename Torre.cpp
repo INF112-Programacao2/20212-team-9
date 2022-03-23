@@ -21,19 +21,21 @@ void Torre::setTipo(int tipo){
     {
         _dano = 10;
         _preco = _preco_torre_1;
-        _alcance = 200;
+        _alcance = _alcance_torre_1;
     }
 
     if(tipo == 2)
     {
         _dano = 20;
         _preco = _preco_torre_2;
+        _alcance = _alcance_torre_2;
     }
 
     if(tipo == 3)
     {
         _dano = 30;
         _preco = _preco_torre_3;
+        _alcance = _alcance_torre_3;
     }
 }
 
