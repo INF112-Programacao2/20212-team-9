@@ -61,7 +61,7 @@ void desenhar_torres()
 {
     for(int i=0; i<num_torres; i++)
     {   
-        if(torres[i].isActive()){
+        if(torres[i].isActive(/*jogador.getOuro()*/)){
             if(torres[i].getTipo() == 1)
                 al_draw_bitmap(tower1, torres[i].getPos_x(), torres[i].getPos_y(), 0);
         }

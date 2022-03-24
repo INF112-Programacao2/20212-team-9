@@ -79,11 +79,13 @@ void Torre::setAlcance(int alcance){
     _alcance = alcance;
 }
 
-bool Torre::isActive(Jogador &jogador){
-    if(jogador.getOuro() >= 100){
+bool Torre::isActive(/*int ouro*/){
+    /*if(ouro >= 100){
         return true;
     }
     else{
         return false;
     }
+*/  
+    return true;
 }
