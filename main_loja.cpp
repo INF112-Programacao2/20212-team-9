@@ -74,21 +74,22 @@ void desenhar_torres()
 {
     for(int i=0; i<num_torres; i++)
     {   
-        if(torres[i].isActive(jogador.getOuro())){
+        
             if(torres[i].getTipo() == 1)
                 al_draw_bitmap(tower1, torres[i].getPos_x(), torres[i].getPos_y(), 0);
-        }
-    }
+        
+    
 
     if(arrastar_torre1)
             {
+            if(torres[i].isActive(jogador.getOuro())){
                 if(cursor_x < 1000 /*Largura do mapa*/)
                     al_draw_circle(cursor_x, cursor_y, Torre::_alcance_torre_1, al_map_rgb(254,254,254), 3.0);
-                    
+            }        
                 desenhar_loja();
                 al_draw_bitmap(tower1, cursor_x-(tower1_x_size/2), cursor_y-(tower1_y_size/2), 0);
             }
-
+    }
 }
 //===============================
 /*
