@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Torre.hpp"
-
+#include "Jogador.hpp"
 //Torre::~Torre() = default;
 
 /*Torre::Torre(int dano, int preco, int tipo, int pos_x, int pos_y){
@@ -77,4 +77,13 @@ int Torre::getAlcance(){
 
 void Torre::setAlcance(int alcance){
     _alcance = alcance;
+}
+
+bool Torre::isActive(Jogador &jogador){
+    if(jogador.getOuro() >= 100){
+        return true;
+    }
+    else{
+        return false;
+    }
 }

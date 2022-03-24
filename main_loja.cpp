@@ -6,6 +6,7 @@
 #include <allegro5/allegro_font.h>
 #include "Torre.hpp"
 #include "Jogador.hpp"
+//#include "metodos.h"
 
 enum MYKEYS
 {
@@ -59,9 +60,11 @@ int num_torres = 0;
 void desenhar_torres()
 {
     for(int i=0; i<num_torres; i++)
-    {
-        if(torres[i].getTipo() == 1)
-            al_draw_bitmap(tower1, torres[i].getPos_x(), torres[i].getPos_y(), 0);
+    {   
+        if(torres[i].isActive()){
+            if(torres[i].getTipo() == 1)
+                al_draw_bitmap(tower1, torres[i].getPos_x(), torres[i].getPos_y(), 0);
+        }
     }
 
     if(arrastar_torre1)

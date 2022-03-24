@@ -1,7 +1,8 @@
 #ifndef TORRE_HPP
 #define TORRE_HPP
-
-class Torre
+#include "metodos.h"
+#include "Jogador.hpp"
+class Torre : public Metodos
 {
 private:
     int _dano;
@@ -26,12 +27,14 @@ public:
     void setPos_y(int pos_y);
     int getAlcance();
     void setAlcance(int alcance);
+    //passar para private----
     static const int _preco_torre_1 = 100;
     static const int _preco_torre_2 = 100;
     static const int _preco_torre_3 = 100;
     static const int _alcance_torre_1 = 200;
     static const int _alcance_torre_2 = 250;
     static const int _alcance_torre_3 = 300;
+    virtual bool isActive(Jogador &jogador);
 };
 
 #endif
