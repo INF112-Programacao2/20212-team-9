@@ -34,7 +34,7 @@ public:
     static const int _alcance_torre_1 = 200;
     static const int _alcance_torre_2 = 250;
     static const int _alcance_torre_3 = 300;
-    virtual bool isActive(/*int ouro*/);
+    virtual bool isActive(int ouro);
 };
 
 #endif

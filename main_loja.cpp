@@ -53,6 +53,19 @@ void desenhar_loja()
 }
 //===============================
 
+//JOGADOR========================
+Jogador jogador(100, 300);
+ALLEGRO_BITMAP *jogador_HUD = NULL;
+ALLEGRO_FONT *vida_jogador = NULL;
+ALLEGRO_FONT *ouro_jogador = NULL;
+
+void desenhar_HUD()
+{
+    al_draw_bitmap(jogador_HUD,0,0,0);
+    al_draw_textf(vida_jogador, al_map_rgb(255,255,255), 75, 20, 0, "%d", jogador.getVida());
+    al_draw_textf(ouro_jogador, al_map_rgb(255,255,255), 245, 20, 0, "%d", jogador.getOuro());
+}
+
 //TORRES=========================
 Torre torres[20];
 int num_torres = 0;
@@ -61,7 +74,7 @@ void desenhar_torres()
 {
     for(int i=0; i<num_torres; i++)
     {   
-        if(torres[i].isActive(/*jogador.getOuro()*/)){
+        if(torres[i].isActive(jogador.getOuro())){
             if(torres[i].getTipo() == 1)
                 al_draw_bitmap(tower1, torres[i].getPos_x(), torres[i].getPos_y(), 0);
         }
@@ -78,7 +91,7 @@ void desenhar_torres()
 
 }
 //===============================
-
+/*
 //JOGADOR========================
 Jogador jogador(100, 300);
 ALLEGRO_BITMAP *jogador_HUD = NULL;
@@ -91,6 +104,7 @@ void desenhar_HUD()
     al_draw_textf(vida_jogador, al_map_rgb(255,255,255), 75, 20, 0, "%d", jogador.getVida());
     al_draw_textf(ouro_jogador, al_map_rgb(255,255,255), 245, 20, 0, "%d", jogador.getOuro());
 }
+*/
 //===============================
 
 int inicializar_allegro()

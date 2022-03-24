@@ -4,7 +4,7 @@
 class Metodos
 {
 public:
-    virtual bool isActive() = 0;
+    virtual bool isActive(int ouro) = 0;
 };
 
 
