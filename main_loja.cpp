@@ -68,7 +68,7 @@ void desenhar_HUD()
 
 //TORRES=========================
 Torre torres[20];
-int num_torres = 0;
+int num_torres = 1;
 
 void desenhar_torres()
 {
