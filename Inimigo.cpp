@@ -58,8 +58,8 @@ int Inimigo::get_posY(){
     return this->_posY;
 }
 void Inimigo::set_posX(){
-    this->_posX += getVelocidadeInimigo();
+    this->_posX += 2;//getVelocidadeInimigo();
 }
 void Inimigo::set_posY(){
-    this->_posY += getVelocidadeInimigo();
+    this->_posY += 2;//getVelocidadeInimigo();
 }

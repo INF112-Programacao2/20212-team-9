@@ -264,9 +264,11 @@ int main() {
 			}
         }
 
-        if(ev.type == ALLEGRO_EVENT_TIMER) 
+        if(ev.type == ALLEGRO_EVENT_TIMER) {
+            inimigos.set_posX();
+            std::cout << inimigos.get_posX() << std::endl;
             redraw = true;
-
+        }
         else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
             break;
         
