@@ -24,6 +24,7 @@ ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_BITMAP *mapa = NULL;
 //int inimigo_x = 0;
 //int inimigo_y = SCREEN_H/2-40;
+int controle_vida = 0;
 bool key[4] = { false, false, false, false };
 bool redraw = true;
 bool sair = false;
@@ -74,6 +75,10 @@ Inimigo inimigos(30, 0, 10, 1);
 void Desenhar_inimigo(){
     if(inimigos.get_posX() < 950){
         al_draw_bitmap(enemy, inimigos.get_posX(), inimigos.get_posY(), 0);
+    }
+    else if(inimigos.get_posX() >= 950 && controle_vida == 0){
+        jogador.perdeVida(25);
+        controle_vida++;
     }
 }
 void mover_enemy(){
