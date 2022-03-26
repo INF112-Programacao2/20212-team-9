@@ -22,7 +22,8 @@ ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_BITMAP *mapa = NULL;
-
+//int inimigo_x = 0;
+//int inimigo_y = SCREEN_H/2-40;
 bool key[4] = { false, false, false, false };
 bool redraw = true;
 bool sair = false;
@@ -68,10 +69,10 @@ void desenhar_HUD()
 }
 //ENEMY==========================
 
-Inimigo inimigos(30, 7, 10, 1);
+Inimigo inimigos(30, 0, 10, 1);
 
 void Desenhar_inimigo(){
-    al_draw_bitmap(enemy, 0, SCREEN_H/2-40, 0);
+    al_draw_bitmap(enemy, inimigos.get_posX(), inimigos.get_posY(), 0);
 }
 //===============================
 
@@ -170,7 +171,7 @@ int inicializar_allegro()
         return 0;
     }
     
-//===============================
+    //===============================
     mapa = al_load_bitmap("Mapa_Final_p.bmp");
     if(!mapa) {
         std::cout << "Falha ao carregar o mapa!" << std::endl;

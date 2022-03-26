@@ -51,3 +51,15 @@ void Inimigo::mover(int ponto, int ponto2){
         _posX++;
     }
 }
+int Inimigo::get_posX(){
+    return this->_posX;
+}
+int Inimigo::get_posY(){
+    return this->_posY;
+}
+void Inimigo::set_posX(){
+    this->_posX += getVelocidadeInimigo();
+}
+void Inimigo::set_posY(){
+    this->_posY += getVelocidadeInimigo();
+}
