@@ -72,7 +72,20 @@ void desenhar_HUD()
 Inimigo inimigos(30, 0, 10, 1);
 
 void Desenhar_inimigo(){
-    al_draw_bitmap(enemy, inimigos.get_posX(), inimigos.get_posY(), 0);
+    if(inimigos.get_posX() < 950){
+        al_draw_bitmap(enemy, inimigos.get_posX(), inimigos.get_posY(), 0);
+    }
+}
+void mover_enemy(){
+    if(inimigos.get_posX() <= 520 && inimigos.get_posY() <=300){
+                inimigos.set_posX();
+            }
+            else if(inimigos.get_posX() >= 500 && inimigos.get_posY() <=350){
+                inimigos.set_posY();
+            }
+            else{
+                inimigos.set_posX();
+            }
 }
 //===============================
 
@@ -265,8 +278,7 @@ int main() {
         }
 
         if(ev.type == ALLEGRO_EVENT_TIMER) {
-            inimigos.set_posX();
-            std::cout << inimigos.get_posX() << std::endl;
+            mover_enemy();
             redraw = true;
         }
         else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
