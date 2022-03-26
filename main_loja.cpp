@@ -6,7 +6,7 @@
 #include <allegro5/allegro_font.h>
 #include "Torre.hpp"
 #include "Jogador.hpp"
-//#include "metodos.h"
+#include "Inimigo.hpp"
 
 enum MYKEYS
 {
@@ -17,7 +17,7 @@ enum MYKEYS
 const float FPS = 45;
 const int SCREEN_W = 1200;
 const int SCREEN_H = 572;
-
+ALLEGRO_BITMAP *enemy = NULL;
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
@@ -53,6 +53,7 @@ void desenhar_loja()
 }
 //===============================
 
+
 //JOGADOR========================
 Jogador jogador(100, 300);
 ALLEGRO_BITMAP *jogador_HUD = NULL;
@@ -65,6 +66,14 @@ void desenhar_HUD()
     al_draw_textf(vida_jogador, al_map_rgb(255,255,255), 75, 20, 0, "%d", jogador.getVida());
     al_draw_textf(ouro_jogador, al_map_rgb(255,255,255), 245, 20, 0, "%d", jogador.getOuro());
 }
+//ENEMY==========================
+
+Inimigo inimigos(30, 7, 10, 1);
+
+void Desenhar_inimigo(){
+    al_draw_bitmap(enemy, 0, SCREEN_H/2-40, 0);
+}
+//===============================
 
 //TORRES=========================
 Torre torres[20];
@@ -91,21 +100,6 @@ void desenhar_torres()
             }
     }
 }
-//===============================
-/*
-//JOGADOR========================
-Jogador jogador(100, 300);
-ALLEGRO_BITMAP *jogador_HUD = NULL;
-ALLEGRO_FONT *vida_jogador = NULL;
-ALLEGRO_FONT *ouro_jogador = NULL;
-
-void desenhar_HUD()
-{
-    al_draw_bitmap(jogador_HUD,0,0,0);
-    al_draw_textf(vida_jogador, al_map_rgb(255,255,255), 75, 20, 0, "%d", jogador.getVida());
-    al_draw_textf(ouro_jogador, al_map_rgb(255,255,255), 245, 20, 0, "%d", jogador.getOuro());
-}
-*/
 //===============================
 
 int inicializar_allegro()
@@ -166,7 +160,17 @@ int inicializar_allegro()
         al_destroy_timer(timer);
         return 0;
     }
+    //INIMIGO========================
 
+    enemy = al_load_bitmap("Inimigo_p.png");
+    if(!enemy)
+    {
+        std::cout << "Falha ao carregar a inimigo!" << std::endl;
+        al_destroy_display(display);
+        return 0;
+    }
+    
+//===============================
     mapa = al_load_bitmap("Mapa_Final_p.bmp");
     if(!mapa) {
         std::cout << "Falha ao carregar o mapa!" << std::endl;
@@ -297,13 +301,14 @@ int main() {
                 }
             } 
         }
-
+        
         if(redraw && al_is_event_queue_empty(event_queue))
-        {
+        {   
             redraw = false;
             al_clear_to_color(al_map_rgb(0,0,0));
             al_draw_bitmap(mapa,0,0,0);
             desenhar_loja();
+            Desenhar_inimigo();
             desenhar_torres();
             desenhar_HUD();
             al_flip_display();
@@ -312,6 +317,7 @@ int main() {
 
     al_destroy_bitmap(mapa);
     al_destroy_bitmap(fundo_loja);
+    al_destroy_bitmap(enemy);
     al_destroy_bitmap(icone_torre1);
     al_destroy_bitmap(tower1);
     al_destroy_bitmap(jogador_HUD);
