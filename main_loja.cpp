@@ -31,6 +31,7 @@ bool sair = false;
 int cursor_x, cursor_y;
 bool cima, baixo, esq, dir;
 //Variáveis globais do jogo======
+int num_frames = 0;
 
 //LOJA===========================
 ALLEGRO_BITMAP *fundo_loja = NULL;
@@ -70,27 +71,39 @@ void desenhar_HUD()
 }
 //ENEMY==========================
 
-Inimigo inimigos;
+Inimigo inimigos[30];
+int num_inimigos = 1;
 
-void Desenhar_inimigo(){
-    if(inimigos.get_posX() < 950){
-        al_draw_bitmap(enemy, inimigos.get_posX(), inimigos.get_posY(), 0);
+void Desenhar_inimigo()
+{
+    for(int i=0; i<num_inimigos; i++)
+    {
+        if(!inimigos[i].isMorto())
+        {
+            if(inimigos[i].get_posX() < 950){
+                al_draw_bitmap(enemy, inimigos[i].get_posX(), inimigos[i].get_posY(), 0);
+            }
+            else if(inimigos[i].get_posX() >= 950 && controle_vida == 0){
+                jogador.perdeVida(25);
+                controle_vida++;
+            }
+        }    
     }
-    else if(inimigos.get_posX() >= 950 && controle_vida == 0){
-        jogador.perdeVida(25);
-        controle_vida++;
-    }
+    
 }
-void mover_enemy(){
-    if(inimigos.get_posX() <= 520 && inimigos.get_posY() <=300){
-                inimigos.set_posX();
-            }
-            else if(inimigos.get_posX() >= 500 && inimigos.get_posY() <=350){
-                inimigos.set_posY();
-            }
-            else{
-                inimigos.set_posX();
-            }
+void mover_enemy()
+{
+    for(int i=0; i<num_inimigos; i++)
+    {
+        if(inimigos[i].get_posX() <= 520 && inimigos[i].get_posY() <=300){
+            inimigos[i].set_posX();
+        }
+        else if(inimigos[i].get_posX() >= 500 && inimigos[i].get_posY() <=350){
+            inimigos[i].set_posY();
+        }
+        else
+            inimigos[i].set_posX();
+    }
 }
 //===============================
 
@@ -102,22 +115,35 @@ void desenhar_torres()
 {
     for(int i=0; i<num_torres; i++)
     {   
+        if(torres[i].getTipo() == 1)
+            al_draw_bitmap(tower1, torres[i].getPos_x(), torres[i].getPos_y(), 0);
         
-            if(torres[i].getTipo() == 1)
-                al_draw_bitmap(tower1, torres[i].getPos_x(), torres[i].getPos_y(), 0);
-        
-    
-
-    if(arrastar_torre1)
+        if(arrastar_torre1)
+        {
+            if(torres[i].isActive(jogador.getOuro()))
             {
-            if(torres[i].isActive(jogador.getOuro())){
                 if(cursor_x < 1000 /*Largura do mapa*/)
-                    al_draw_circle(cursor_x, cursor_y, Torre::_alcance_torre_1, al_map_rgb(254,254,254), 3.0);
+                al_draw_circle(cursor_x, cursor_y, Torre::_alcance_torre_1, al_map_rgb(254,254,254), 3.0);
             }        
-                desenhar_loja();
-                al_draw_bitmap(tower1, cursor_x-(tower1_x_size/2), cursor_y-(tower1_y_size/2), 0);
-            }
+        desenhar_loja();
+        al_draw_bitmap(tower1, cursor_x-(tower1_x_size/2), cursor_y-(tower1_y_size/2), 0);
+        }
     }
+}
+void selecionar_alvos()
+{   
+   //for(int i=1; i<num_torres; i++)
+        torres[1].selecionar_alvo(inimigos, num_inimigos);
+}
+
+void atirar_projeteis()
+{
+    int indice;
+    //for(int i=1; i<num_torres; i++)
+        torres[1].atirar(inimigos);
+        //indice = torres[1].getIndice_alvo;
+        if(torres[1].getIndice_alvo() != -1)
+            al_draw_line((torres[1].getPos_x()+41), (torres[1].getPos_y()+60), (inimigos[torres[1].getIndice_alvo()].get_posX()+25), (inimigos[torres[1].getIndice_alvo()].get_posY()+16), al_map_rgb(20,20,20), 4.0);
 }
 //===============================
 
@@ -283,8 +309,11 @@ int main() {
         }
 
         if(ev.type == ALLEGRO_EVENT_TIMER) {
-            mover_enemy();
-            redraw = true;
+                num_frames++;
+                mover_enemy();
+                selecionar_alvos();
+                redraw = true;
+
         }
         else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
             break;
@@ -331,6 +360,8 @@ int main() {
             Desenhar_inimigo();
             desenhar_torres();
             desenhar_HUD();
+             if(num_frames%15==0)
+                    atirar_projeteis();
             al_flip_display();
         }
     }

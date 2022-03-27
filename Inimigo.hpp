@@ -4,7 +4,7 @@
 class Inimigo{
     private:
 
-    int _vidaInimigo;
+    int _vidaInimigo = 50;
     int _velocidadeInimigo = 2;
     int _ouroInimigo;
     int _tipoInimigo;

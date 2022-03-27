@@ -2,6 +2,8 @@
 #define TORRE_HPP
 #include "metodos.h"
 #include "Jogador.hpp"
+#include "Inimigo.hpp"
+
 class Torre : public Metodos
 {
 private:
@@ -11,6 +13,7 @@ private:
     int _pos_x;
     int _pos_y;
     int _alcance;
+    int _indice_do_alvo = -1;
 
 public:
     //Torre(int dano, int preco, int tipo, int pos_x, int pos_y);
@@ -27,6 +30,11 @@ public:
     void setPos_y(int pos_y);
     int getAlcance();
     void setAlcance(int alcance);
+
+    //Balística
+    void selecionar_alvo(Inimigo inimigos[], int num_inimigos);
+    void atirar(Inimigo inimigos[]);
+    int getIndice_alvo();
     //passar para private----
     static const int _preco_torre_1 = 100;
     static const int _preco_torre_2 = 100;

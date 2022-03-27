@@ -89,3 +89,35 @@ bool Torre::isActive(int ouro){
  
     //return true;
 }
+
+void Torre::selecionar_alvo(Inimigo inimigos[], int num_inimigos){
+    int distancia;
+    bool tem_alvo = false;
+    for(int i = 0; i<num_inimigos; i++)
+    {
+        distancia = (_pos_x-inimigos[i].get_posX())*(_pos_x-inimigos[i].get_posX()) + 
+        (_pos_y-inimigos[i].get_posY())*(_pos_y-inimigos[i].get_posY());
+
+        if(!inimigos[i].isMorto() && distancia<=(_alcance*_alcance))
+        {
+            tem_alvo = true;
+            _indice_do_alvo = i;
+            break;
+        }
+    }
+    if(!tem_alvo)
+        _indice_do_alvo = -1;
+    //std::cout << _indice_do_alvo << std::endl;
+}
+
+void Torre::atirar(Inimigo inimigos[]){
+    if(_indice_do_alvo != -1)
+    {
+        inimigos[_indice_do_alvo].tomaDano(_dano);
+        std::cout << "tiro" << std::endl;
+    }
+}
+
+int Torre::getIndice_alvo(){
+    return _indice_do_alvo;
+}
