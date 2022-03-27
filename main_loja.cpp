@@ -78,7 +78,7 @@ void libera_inimigo(Inimigo inimigos[], int num_enemy);
 
 void Desenhar_inimigo()
 {   
-    libera_inimigo(inimigos, num_inimigos);
+    
     for(int i=0; i<num_inimigos; i++)
     {
         if(!inimigos[i].isMorto())
@@ -94,20 +94,7 @@ void Desenhar_inimigo()
     }
     
 }
-void mover_enemy()
-{
-    for(int i=0; i<num_inimigos; i++)
-    {
-        if(inimigos[i].get_posX() <= 520 && inimigos[i].get_posY() <=300){
-            inimigos[i].set_posX();
-        }
-        else if(inimigos[i].get_posX() >= 500 && inimigos[i].get_posY() <=350){
-            inimigos[i].set_posY();
-        }
-        else
-            inimigos[i].set_posX();
-    }
-}
+void mover_enemy();
 //===============================
 
 //TORRES=========================
@@ -313,6 +300,7 @@ int main() {
 
         if(ev.type == ALLEGRO_EVENT_TIMER) {
                 num_frames++;
+                libera_inimigo(inimigos, num_inimigos);
                 mover_enemy();
                 selecionar_alvos();
                 redraw = true;
@@ -388,8 +376,27 @@ int main() {
 void libera_inimigo(Inimigo inimigos[], int num_enemy){
     for(int i = 0; i < num_enemy; i++){
         if(inimigos[i].isMorto()){
-            inimigos[i].reset_pos();
-            jogador.setOuro(inimigos[i].getOuroInimigo());
+            if(rand() % 100 == 0){
+                jogador.setOuro(inimigos[i].getOuroInimigo());
+                inimigos[i].reset_pos();
+                break;
+            }
+            
         }
     }
+}
+
+void mover_enemy(){
+    for(int i=0; i<num_inimigos; i++)
+    {
+        if(inimigos[i].get_posX() <= 520 && inimigos[i].get_posY() <=300){
+            inimigos[i].set_posX();
+        }
+        else if(inimigos[i].get_posX() >= 500 && inimigos[i].get_posY() <=350){
+            inimigos[i].set_posY();
+        }
+        else
+            inimigos[i].set_posX();
+    }
+
 }
