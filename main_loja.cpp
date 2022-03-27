@@ -23,6 +23,7 @@ ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_BITMAP *mapa = NULL;
+ALLEGRO_BITMAP *menu = NULL;
 //int inimigo_x = 0;
 //int inimigo_y = SCREEN_H/2-40;
 int controle_vida = 0;
@@ -54,6 +55,9 @@ void desenhar_loja()
 {
     al_draw_bitmap(fundo_loja,1000,0,0);
     al_draw_bitmap(icone_torre1, pos_x_icone_torre1, pos_y_icone_torre1,0);
+}
+void desenhar_menu(){
+    al_draw_bitmap(menu, 0, 0, 0);   
 }
 //===============================
 
@@ -212,6 +216,7 @@ int inicializar_allegro()
     }
     
     //===============================
+    //MAPA===========================
     mapa = al_load_bitmap("Mapa_Final_p.bmp");
     if(!mapa) {
         std::cout << "Falha ao carregar o mapa!" << std::endl;
@@ -219,6 +224,16 @@ int inicializar_allegro()
         return 0;
     }
     al_draw_bitmap(mapa,0,0,0);
+    //===============================
+    //MENU===========================
+    menu = al_load_bitmap("Menu_bmp.bmp");
+    if(!menu){
+        std::cout << "Falha ao carregar o menu!" << std::endl;
+        al_destroy_display(display);
+        return 0;
+    }
+    al_draw_bitmap(menu, 0, 0, 0);
+    //===============================
 
     fundo_loja = al_load_bitmap("fundo_loja.bmp");
     if(!fundo_loja) {
@@ -359,12 +374,14 @@ int main() {
         if(redraw && al_is_event_queue_empty(event_queue))
         {   
             redraw = false;
+            
             al_clear_to_color(al_map_rgb(0,0,0));
             al_draw_bitmap(mapa,0,0,0);
             desenhar_loja();
             Desenhar_inimigo();
             desenhar_torres();
             desenhar_HUD();
+            //desenhar_menu();
              if(num_frames%15==0)
                     atirar_projeteis();
             al_flip_display();
@@ -372,6 +389,7 @@ int main() {
     }
 
     al_destroy_bitmap(mapa);
+    al_destroy_bitmap(menu);
     al_destroy_bitmap(fundo_loja);
     al_destroy_bitmap(enemy);
     al_destroy_bitmap(icone_torre1);
