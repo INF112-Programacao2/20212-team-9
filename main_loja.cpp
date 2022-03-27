@@ -123,18 +123,23 @@ void desenhar_torres()
 }
 void selecionar_alvos()
 {   
-   //for(int i=1; i<num_torres; i++)
-        torres[1].selecionar_alvo(inimigos, num_inimigos);
+   for(int i=1; i<=num_torres; i++)
+        torres[i].selecionar_alvo(inimigos, num_inimigos);
 }
 
 void atirar_projeteis()
 {
     int indice;
-    //for(int i=1; i<num_torres; i++)
-        torres[1].atirar(inimigos);
-        //indice = torres[1].getIndice_alvo;
-        if(torres[1].getIndice_alvo() != -1)
-            al_draw_line((torres[1].getPos_x()+41), (torres[1].getPos_y()+60), (inimigos[torres[1].getIndice_alvo()].get_posX()+25), (inimigos[torres[1].getIndice_alvo()].get_posY()+16), al_map_rgb(20,20,20), 4.0);
+    bool matou;
+    for(int i=1; i<=num_torres; i++)
+    {
+        matou = false;
+        torres[i].atirar(inimigos, matou);
+        if(torres[i].getIndice_alvo() != -1)
+            al_draw_line((torres[i].getPos_x()+41), (torres[i].getPos_y()+70), (inimigos[torres[i].getIndice_alvo()].get_posX()+40), (inimigos[torres[i].getIndice_alvo()].get_posY()+16), al_map_rgb(20,20,20), 4.0);
+        if(matou)
+            jogador.setOuro(inimigos[i].getOuroInimigo());
+    }
 }
 //===============================
 
@@ -383,7 +388,6 @@ void libera_inimigo(Inimigo inimigos[], int num_enemy){
     for(int i = 0; i < num_enemy; i++){
         if(inimigos[i].isMorto()){
             if(rand() % 300 == 0){
-                jogador.setOuro(inimigos[i].getOuroInimigo());
                 inimigos[i].reset_pos();
                 break;
             }

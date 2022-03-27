@@ -33,7 +33,7 @@ public:
 
     //Balística
     void selecionar_alvo(Inimigo inimigos[], int num_inimigos);
-    void atirar(Inimigo inimigos[]);
+    void atirar(Inimigo inimigos[], bool &matou);
     int getIndice_alvo();
     //passar para private----
     static const int _preco_torre_1 = 100;
