@@ -29,7 +29,7 @@ void Inimigo::tomaDano(int dano){
     //dano da torre - vida do inimigo
     _vidaInimigo -= dano;
 }
-
+//mexer aqui****
 bool Inimigo::isMorto(){
     if(_vidaInimigo <= 0)
         return true;
@@ -62,4 +62,10 @@ void Inimigo::set_posX(){
 }
 void Inimigo::set_posY(){
     this->_posY += 2;//getVelocidadeInimigo();
+}
+
+bool Inimigo::reset_pos(){
+    this->_posX = 0;
+    this->_posY = 246;
+    this->_vidaInimigo = 50;
 }

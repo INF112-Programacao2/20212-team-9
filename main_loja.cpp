@@ -74,8 +74,11 @@ void desenhar_HUD()
 Inimigo inimigos[30];
 int num_inimigos = 1;
 
+void libera_inimigo(Inimigo inimigos[], int num_enemy);
+
 void Desenhar_inimigo()
-{
+{   
+    libera_inimigo(inimigos, num_inimigos);
     for(int i=0; i<num_inimigos; i++)
     {
         if(!inimigos[i].isMorto())
@@ -378,5 +381,15 @@ int main() {
     al_destroy_display(display);
     al_destroy_event_queue(event_queue);
 
+    
     return 0;
+}
+
+void libera_inimigo(Inimigo inimigos[], int num_enemy){
+    for(int i = 0; i < num_enemy; i++){
+        if(inimigos[i].isMorto()){
+            inimigos[i].reset_pos();
+            jogador.setOuro(inimigos[i].getOuroInimigo());
+        }
+    }
 }
