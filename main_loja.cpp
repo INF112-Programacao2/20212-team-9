@@ -73,7 +73,7 @@ void desenhar_HUD()
 //ENEMY==========================
 
 Inimigo inimigos[30];
-int num_inimigos = 5;
+int num_inimigos = 20;
 
 void libera_inimigo(Inimigo inimigos[], int num_enemy);
 
@@ -308,7 +308,10 @@ int main() {
 				sair = true;
 			}
         }
-
+        if(jogador.getVida() == 0){
+            std::cout << "game over!" << std::endl;
+            sair = true;
+        }
         if(ev.type == ALLEGRO_EVENT_TIMER) {
                 num_frames++;
                 libera_inimigo(inimigos, num_inimigos);
