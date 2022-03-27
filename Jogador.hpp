@@ -13,6 +13,7 @@
         int getVida();
         int getOuro();
         void setOuro(int ouroInimigo);
+        void setOuro();
         void perdeVida(int ataqueInimigo); 
         void pagar(int preco);
         bool isPossivel(int preco);

@@ -22,9 +22,13 @@ int Jogador::getOuro() {
     return _ouro;
 }
 
+void Jogador::setOuro(){
+    _ouro += 0;
+}
 void Jogador::setOuro(int ouroInimigo) {
     _ouro += ouroInimigo;
 }
+
 
 void Jogador::pagar(int preco) {
     _ouro -= preco;
