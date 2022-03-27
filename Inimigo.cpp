@@ -1,5 +1,5 @@
 #include "Inimigo.hpp"
-
+/*
 Inimigo::~Inimigo() = default;
 
 Inimigo::Inimigo(int vidaInimigo, int velocidadeInimigo, int ouroInimigo, int tipoInimigo) {
@@ -8,7 +8,7 @@ Inimigo::Inimigo(int vidaInimigo, int velocidadeInimigo, int ouroInimigo, int ti
     this -> _ouroInimigo = ouroInimigo;
     this -> _tipoInimigo = tipoInimigo;
 }
-
+*/
 int Inimigo::getOuroInimigo(){
     return _ouroInimigo;
 }

@@ -5,7 +5,7 @@ class Inimigo{
     private:
 
     int _vidaInimigo;
-    int _velocidadeInimigo = 10;
+    int _velocidadeInimigo = 2;
     int _ouroInimigo;
     int _tipoInimigo;
     int _posX = 0;
@@ -13,8 +13,8 @@ class Inimigo{
 
     public:
 
-    Inimigo(int vidaInimigo, int velocidadeInimigo, int ouroInimigo, int tipoInimigo);
-    ~Inimigo();
+    //Inimigo(int vidaInimigo, int velocidadeInimigo, int ouroInimigo, int tipoInimigo);
+    //~Inimigo();
     bool atravessouMapa();
     bool isMorto();
     int getVidaInimigo();

@@ -70,7 +70,7 @@ void desenhar_HUD()
 }
 //ENEMY==========================
 
-Inimigo inimigos(30, 0, 10, 1);
+Inimigo inimigos;
 
 void Desenhar_inimigo(){
     if(inimigos.get_posX() < 950){
