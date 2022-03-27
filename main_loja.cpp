@@ -4,6 +4,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_font.h>
+#include <ctime>
 #include "Torre.hpp"
 #include "Jogador.hpp"
 #include "Inimigo.hpp"
@@ -72,7 +73,7 @@ void desenhar_HUD()
 //ENEMY==========================
 
 Inimigo inimigos[30];
-int num_inimigos = 1;
+int num_inimigos = 5;
 
 void libera_inimigo(Inimigo inimigos[], int num_enemy);
 
@@ -86,15 +87,15 @@ void Desenhar_inimigo()
             if(inimigos[i].get_posX() < 950){
                 al_draw_bitmap(enemy, inimigos[i].get_posX(), inimigos[i].get_posY(), 0);
             }
-            else if(inimigos[i].get_posX() >= 950 && controle_vida == 0){
+            else if(inimigos[i].get_posX() >= 950){
                 jogador.perdeVida(25);
-                controle_vida++;
+                inimigos[i].reset_pos();
             }
         }    
     }
     
 }
-void mover_enemy();
+void mover_enemy(Inimigo inimigos[], int num_inimigos);
 //===============================
 
 //TORRES=========================
@@ -284,6 +285,11 @@ int inicializar_allegro()
 
 int main() {
 
+    //SEED===========================
+    unsigned seed = time(0);
+
+    srand(seed);
+    //===============================
     if(!inicializar_allegro())
         return -1;
 
@@ -301,7 +307,7 @@ int main() {
         if(ev.type == ALLEGRO_EVENT_TIMER) {
                 num_frames++;
                 libera_inimigo(inimigos, num_inimigos);
-                mover_enemy();
+                mover_enemy(inimigos, num_inimigos);
                 selecionar_alvos();
                 redraw = true;
 
@@ -376,7 +382,7 @@ int main() {
 void libera_inimigo(Inimigo inimigos[], int num_enemy){
     for(int i = 0; i < num_enemy; i++){
         if(inimigos[i].isMorto()){
-            if(rand() % 100 == 0){
+            if(rand() % 300 == 0){
                 jogador.setOuro(inimigos[i].getOuroInimigo());
                 inimigos[i].reset_pos();
                 break;
@@ -386,7 +392,7 @@ void libera_inimigo(Inimigo inimigos[], int num_enemy){
     }
 }
 
-void mover_enemy(){
+void mover_enemy(Inimigo inimigos[], int num_inimigos){
     for(int i=0; i<num_inimigos; i++)
     {
         if(inimigos[i].get_posX() <= 520 && inimigos[i].get_posY() <=300){

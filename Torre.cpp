@@ -114,7 +114,7 @@ void Torre::atirar(Inimigo inimigos[]){
     if(_indice_do_alvo != -1)
     {
         inimigos[_indice_do_alvo].tomaDano(_dano);
-        std::cout << "tiro" << std::endl;
+        //std::cout << "tiro" << std::endl;
     }
 }
 
