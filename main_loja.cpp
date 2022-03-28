@@ -86,7 +86,7 @@ void desenhar_HUD()
 
 //ENEMY==========================
 Inimigo inimigos[30];
-int num_inimigos = 10;
+int num_inimigos = 5;
 
 void libera_inimigo(Inimigo inimigos[], int num_enemy);
 
@@ -405,7 +405,15 @@ int main() {
     {
         ALLEGRO_EVENT ev;
         al_wait_for_event(event_queue, &ev);
-
+        if(num_torres > 4 && num_torres < 7){
+            num_inimigos = 10;
+        }
+        else if(num_torres > 7 && num_torres < 10){
+            num_inimigos = 15;
+        }
+        else if(num_torres >= 10){
+            num_inimigos = 20;
+        }
         if(ev.type == ALLEGRO_EVENT_KEY_DOWN){
 			if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
 				sair = true;
@@ -507,7 +515,7 @@ int main() {
             al_flip_display();
         }
     }
-
+    
     al_destroy_bitmap(mapa);
     al_destroy_bitmap(fundo_loja);
     al_destroy_bitmap(enemy);
@@ -522,6 +530,7 @@ int main() {
     al_destroy_timer(timer);
     al_destroy_display(display);
     al_destroy_event_queue(event_queue);
+    al_destroy_sample(trilha_sonora);
 
     return 0;
 }
