@@ -261,7 +261,7 @@ int inicializar_allegro()
     }
     //INIMIGO========================
 
-    enemy = al_load_bitmap("Inimigo_p.png");
+    enemy = al_load_bitmap("imagem/Inimigo_p.png");
     if(!enemy)
     {
         std::cout << "Falha ao carregar a inimigo!" << std::endl;
@@ -276,7 +276,7 @@ int inicializar_allegro()
         std::cout << "Faha ao carregar menu!" << std::endl;
     }
     //===============================
-    mapa = al_load_bitmap("Mapa_Final_p.bmp");
+    mapa = al_load_bitmap("imagem/Mapa_Final_p.bmp");
     if(!mapa) {
         std::cout << "Falha ao carregar o mapa!" << std::endl;
         al_destroy_display(display);
@@ -284,7 +284,7 @@ int inicializar_allegro()
     }
     al_draw_bitmap(mapa,0,0,0);
 
-    fundo_loja = al_load_bitmap("fundo_loja.bmp");
+    fundo_loja = al_load_bitmap("imagem/fundo_loja.bmp");
     if(!fundo_loja) {
         std::cout << "Falha ao carregar fundo_loja!" << std::endl;
         al_destroy_display(display);
@@ -292,7 +292,7 @@ int inicializar_allegro()
     }
     al_draw_bitmap(fundo_loja,1000,0,0);
 
-    icone_torre = al_load_bitmap("icone1.bmp");
+    icone_torre = al_load_bitmap("imagem/Torre_1.bmp");
     if(!icone_torre) {
         std::cout << "Falha ao carregar icone_torre!" << std::endl;
         al_destroy_display(display);
@@ -300,7 +300,7 @@ int inicializar_allegro()
     }
     al_draw_bitmap(icone_torre, pos_x_icone_torre, pos_y_icone_torre,0);
 
-    icone_morteiro = al_load_bitmap("icone2.bmp");
+    icone_morteiro = al_load_bitmap("imagem/Torre_2.bmp");
     if(!icone_morteiro) {
         std::cout << "Falha ao carregar icone_morteiro!" << std::endl;
         al_destroy_display(display);
@@ -308,7 +308,7 @@ int inicializar_allegro()
     }
     al_draw_bitmap(icone_morteiro, pos_x_icone_morteiro, pos_y_icone_morteiro,0);
 
-    tower = al_load_bitmap("tower.bmp");
+    tower = al_load_bitmap("imagem/tower.bmp");
     if(!tower) {
         std::cout << "Falha ao carregar tower!" << std::endl;
         al_destroy_display(display);
@@ -316,7 +316,7 @@ int inicializar_allegro()
     }
     al_convert_mask_to_alpha(tower, al_map_rgb(255, 255, 255));
 
-    morteiro = al_load_bitmap("morteiro.bmp");
+    morteiro = al_load_bitmap("imagem/morteiro.bmp");
     if(!morteiro) {
         std::cout << "Falha ao carregar morteiro!" << std::endl;
         al_destroy_display(display);
@@ -324,7 +324,7 @@ int inicializar_allegro()
     }
     al_convert_mask_to_alpha(morteiro, al_map_rgb(255, 255, 255));
 
-    jogador_HUD = al_load_bitmap("jogador_HUD.bmp");
+    jogador_HUD = al_load_bitmap("imagem/jogador_HUD.bmp");
     if(!jogador_HUD) {
         std::cout << "Falha ao carregar jogador_HUD!" << std::endl;
         al_destroy_display(display);
