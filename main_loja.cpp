@@ -1,5 +1,7 @@
 #include <iostream>
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
@@ -19,6 +21,10 @@ enum MYKEYS
 const float FPS = 45;
 const int SCREEN_W = 1200;
 const int SCREEN_H = 572;
+//ponteiro para o som
+ALLEGRO_SAMPLE *trilha_sonora = NULL;
+//instancia a trilha sonora para evitar conflitos
+ALLEGRO_SAMPLE_INSTANCE *inst_trilha_sonora = NULL;
 ALLEGRO_BITMAP *enemy = NULL;
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
@@ -64,7 +70,6 @@ void desenhar_loja()
     al_draw_bitmap(icone_morteiro, pos_x_icone_morteiro, pos_y_icone_morteiro,0);
 }
 //===============================
-
 
 //JOGADOR========================
 Jogador jogador(100, 300);
@@ -208,7 +213,12 @@ int inicializar_allegro()
         std::cout << "Falha ao carregar Allegro" << std::endl;
         return 0;
     }
-
+    //SOM_ADDON======================
+    al_install_audio();
+    al_init_acodec_addon();
+    //quantos sons o jogo vai ter
+    al_reserve_samples(1);
+    
     if(!al_init_primitives_addon())
     {
         std::cout << "Falha ao carregar primitives" << std::endl;
@@ -269,6 +279,19 @@ int inicializar_allegro()
         return 0;
     }
     
+    //===============================
+    //SOM============================
+    trilha_sonora = al_load_sample("imagem/Trilha_sonora.wav");
+    if(!trilha_sonora){
+        std::cout << "falha ao carregar o som" << std::endl;
+        al_destroy_display(display);
+        return 0;
+    }
+    inst_trilha_sonora = al_create_sample_instance(trilha_sonora);
+    al_attach_sample_instance_to_mixer(inst_trilha_sonora, al_get_default_mixer());
+
+    al_set_sample_instance_playmode(inst_trilha_sonora, ALLEGRO_PLAYMODE_LOOP);
+    al_set_sample_instance_gain(inst_trilha_sonora, 0.8);
     //===============================
     //MENU===========================
     menu = al_load_bitmap("Menu_bmp.bmp");
@@ -369,7 +392,7 @@ int inicializar_allegro()
 }
 
 int main() {
-
+    
     //SEED===========================
     unsigned seed = time(0);
     srand(seed);
@@ -473,6 +496,7 @@ int main() {
                 desenhar_menu();
                 al_flip_display();
             }else{
+                al_play_sample_instance(inst_trilha_sonora);
                 al_draw_bitmap(mapa,0,0,0);
                 desenhar_loja();
                 Desenhar_inimigo();
