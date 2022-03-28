@@ -1,26 +1,34 @@
 #include <iostream>
-#include "Torre.hpp"
+#include "Morteiro.h"
 
-int Torre::getPreco(){
+int Morteiro::getPreco(){
     return _preco;
 }
 
-int Torre::getAlcance(){
+int Morteiro::getAlcance(){
     return _alcance;
 }
 
-int Torre::getDano(){
+int Morteiro::getDano(){
     return _dano;
 }
 
-bool Torre::is_possivel_comprar(int ouro) {
+bool Morteiro::is_possivel_comprar(int ouro) {
     if(ouro >= _preco)
         return true;
     else
         return false;
 }
 
-void Torre::selecionar_alvo(Inimigo inimigos[], int num_inimigos){
+int Morteiro::getProjetil_pos_y() {
+    return _projetil_pos_y;
+}
+
+void Morteiro::incrementar_pos_y_projetil(int num) {
+    _projetil_pos_y += num;
+}
+
+void Morteiro::selecionar_alvo(Inimigo inimigos[], int num_inimigos){
     int distancia;
     bool tem_alvo = false;
     for(int i = 0; i<num_inimigos; i++)
@@ -37,15 +45,13 @@ void Torre::selecionar_alvo(Inimigo inimigos[], int num_inimigos){
     }
     if(!tem_alvo)
         _indice_do_alvo = -1;
-    //std::cout << _indice_do_alvo << std::endl;
 }
 
-void Torre::atirar(Inimigo inimigos[], bool &matou){
+void Morteiro::atirar(Inimigo inimigos[], bool &matou){
     if(_indice_do_alvo != -1)
     {
         if(inimigos[_indice_do_alvo].getVidaInimigo() - _dano <= 0)
                 matou = true;
         inimigos[_indice_do_alvo].tomaDano(_dano);
-        //std::cout << "tiro" << std::endl;
     }
 }
