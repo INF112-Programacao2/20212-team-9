@@ -24,9 +24,11 @@ ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_BITMAP *mapa = NULL;
+ALLEGRO_BITMAP *menu = NULL;
 //int inimigo_x = 0;
 //int inimigo_y = SCREEN_H/2-40;
 int controle_vida = 0;
+int enter = 0;
 bool key[4] = { false, false, false, false };
 bool redraw = true;
 bool sair = false;
@@ -79,7 +81,7 @@ void desenhar_HUD()
 
 //ENEMY==========================
 Inimigo inimigos[30];
-int num_inimigos = 20;
+int num_inimigos = 10;
 
 void libera_inimigo(Inimigo inimigos[], int num_enemy);
 
@@ -103,6 +105,8 @@ void Desenhar_inimigo()
 }
 void mover_enemy(Inimigo inimigos[], int num_inimigos);
 //===============================
+//prototipo menu
+void desenhar_menu();
 
 //DEFESAS=========================
 Torre torres[20];
@@ -266,6 +270,12 @@ int inicializar_allegro()
     }
     
     //===============================
+    //MENU===========================
+    menu = al_load_bitmap("Menu_bmp.bmp");
+    if(!menu){
+        std::cout << "Faha ao carregar menu!" << std::endl;
+    }
+    //===============================
     mapa = al_load_bitmap("Mapa_Final_p.bmp");
     if(!mapa) {
         std::cout << "Falha ao carregar o mapa!" << std::endl;
@@ -382,7 +392,7 @@ int main() {
             std::cout << "game over!" << std::endl;
             sair = true;
         }
-        if(ev.type == ALLEGRO_EVENT_TIMER) {
+        if(ev.type == ALLEGRO_EVENT_TIMER && enter == 1) {
                 num_frames++;
                 libera_inimigo(inimigos, num_inimigos);
                 mover_enemy(inimigos, num_inimigos);
@@ -400,7 +410,16 @@ int main() {
         }
 
         else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-        {
+        {   
+            if(enter == 0 && cursor_x >= 470 && cursor_x <= 720){
+                if(cursor_y >= 356 && cursor_y <= 410){
+                	if (ev.mouse.button & 1)
+		        	{
+				        enter = 1;
+
+			        }
+                }
+            }
             if(ev.mouse.button && pos_x_icone_torre<=cursor_x &&
             cursor_x<= pos_x_icone_torre+140 && pos_y_icone_torre<=cursor_y &&
             cursor_y<=pos_y_icone_torre+190 && jogador.isPossivel(Torre::_preco))
@@ -450,12 +469,17 @@ int main() {
         {   
             redraw = false;
             al_clear_to_color(al_map_rgb(0,0,0));
-            al_draw_bitmap(mapa,0,0,0);
-            desenhar_loja();
-            Desenhar_inimigo();
-            desenhar_defesas();
-            desenhar_HUD();
-            atirar_projeteis(num_frames);
+            if(enter == 0){
+                desenhar_menu();
+                al_flip_display();
+            }else{
+                al_draw_bitmap(mapa,0,0,0);
+                desenhar_loja();
+                Desenhar_inimigo();
+                desenhar_defesas();
+                desenhar_HUD();
+                atirar_projeteis(num_frames);
+            }
             al_flip_display();
         }
     }
@@ -468,6 +492,7 @@ int main() {
     al_destroy_bitmap(tower);
     al_destroy_bitmap(morteiro);
     al_destroy_bitmap(jogador_HUD);
+    al_destroy_bitmap(menu);
     al_destroy_font(vida_jogador);
     al_destroy_font(ouro_jogador);
     al_destroy_timer(timer);
@@ -501,4 +526,8 @@ void mover_enemy(Inimigo inimigos[], int num_inimigos){
             inimigos[i].set_posX();
     }
 
+}
+
+void desenhar_menu(){
+    al_draw_bitmap(menu, 0, 0, 0);
 }
