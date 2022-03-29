@@ -435,14 +435,14 @@ int main() {
     {
         ALLEGRO_EVENT ev;
         al_wait_for_event(event_queue, &ev);
-        if(num_torres > 4 && num_torres < 7){
+        if(num_torres + num_morteiros> 4 && num_torres + num_morteiros < 7){
             num_inimigos = 10;
         }
-        else if(num_torres > 7 && num_torres < 10){
-            num_inimigos = 15;
-        }
-        else if(num_torres >= 10){
+        else if(num_torres + num_morteiros > 7 && num_torres + num_morteiros < 10){
             num_inimigos = 20;
+        }
+        else if(num_torres + num_morteiros >= 10){
+            num_inimigos = 30;
         }
         if(ev.type == ALLEGRO_EVENT_KEY_DOWN){
 			if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
