@@ -7,39 +7,38 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_font.h>
 #include <ctime>
+#include <cmath>
 #include "Torre.hpp"
 #include "Morteiro.h"
 #include "Jogador.hpp"
 #include "Inimigo.hpp"
 
-enum MYKEYS
-{
-    KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
-};
-
-//Variáveis globais do jogo======
+//GLOBAIS DO JOGO================
 const float FPS = 45;
 const int SCREEN_W = 1200;
 const int SCREEN_H = 572;
+
 //ponteiro para o som
 ALLEGRO_SAMPLE *trilha_sonora = NULL;
 //instancia a trilha sonora para evitar conflitos
 ALLEGRO_SAMPLE_INSTANCE *inst_trilha_sonora = NULL;
-ALLEGRO_BITMAP *enemy = NULL;
-ALLEGRO_DISPLAY *display = NULL;
+//Fila de eventos
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
+//Display
+ALLEGRO_DISPLAY *display = NULL;
+//Temporizador
 ALLEGRO_TIMER *timer = NULL;
+//Bitmaps
+ALLEGRO_BITMAP *enemy = NULL;
 ALLEGRO_BITMAP *mapa = NULL;
 ALLEGRO_BITMAP *menu = NULL;
-//int inimigo_x = 0;
-//int inimigo_y = SCREEN_H/2-40;
+ALLEGRO_BITMAP *tela_game_over = NULL;
+
 int controle_vida = 0;
 int enter = 0;
-bool key[4] = { false, false, false, false };
 bool redraw = true;
 bool sair = false;
 int cursor_x, cursor_y;
-bool cima, baixo, esq, dir;
 int num_frames = 0;
 //===============================
 
@@ -76,6 +75,7 @@ Jogador jogador(100, 300);
 ALLEGRO_BITMAP *jogador_HUD = NULL;
 ALLEGRO_FONT *vida_jogador = NULL;
 ALLEGRO_FONT *ouro_jogador = NULL;
+ALLEGRO_FONT *score_jogador = NULL;
 
 void desenhar_HUD()
 {
@@ -167,7 +167,6 @@ void atirar_projeteis(int num_frames)
     if(num_frames%35==0)
         if(num_torres != 0)
         {
-            int indice;
             bool matou;
             for(int i=0; i<num_torres; i++)
             {
@@ -176,32 +175,52 @@ void atirar_projeteis(int num_frames)
                 if(torres[i].getIndice_alvo() != -1)
                     al_draw_line((torres[i].getPos_x()+33), (torres[i].getPos_y()+55), (inimigos[torres[i].getIndice_alvo()].get_posX()+40), (inimigos[torres[i].getIndice_alvo()].get_posY()+16), al_map_rgb(20,20,20), 4.0);
                 if(matou)
+                {
                     jogador.setOuro(inimigos[i].getOuroInimigo());
+                    jogador.ganharScore();
+                }
             }
         }
     
-        if(num_morteiros != 0)
+    if(num_morteiros != 0)
+    {
+        bool matou;
+        int distancia;
+        int pos1, pos2;
+        for(int i=0; i<num_morteiros; i++)
         {
-            int indice;
-            bool matou;
-            for(int i=0; i<num_morteiros; i++)
+            matou = false;
+            if(morteiros[i].getIndice_alvo() != -1)
             {
-                matou = false;
-                //morteios[i].atirar(inimigos, matou);
-                if(morteiros[i].getIndice_alvo() != -1)
+                if(morteiros[i].getProjetil_pos_y() < -150)
                 {
-                    if(morteiros[i].getProjetil_pos_y() > -30)
+                    morteiros[i].inverter_Projetil_dy();
+                    morteiros[i].set_projetil_subindo(false);
+                }
+            
+                if(morteiros[i].getProjetil_pos_y() > inimigos[morteiros[i].getIndice_alvo()].get_posY()+20 && morteiros[i].isProjetil_subindo() == false)
+                {
+                    morteiros[i].inverter_Projetil_dy();
+                    morteiros[i].set_projetil_subindo(true);
+                    morteiros[i].atirar(inimigos, matou);
+                    if(matou)
                     {
-                        morteiros[i].incrementar_pos_y_projetil(projetil_dy);
-                        al_draw_filled_circle(morteiros[i].getPos_x()+37, morteiros[i].getPos_y()+morteiros[i].getProjetil_pos_y(), 12, al_map_rgb(10,10,10));
+                        jogador.setOuro(inimigos[i].getOuroInimigo());
+                        jogador.ganharScore();
                     }
-                    
+
+                    morteiros[i].setProjetil_pos_y(morteiros[i].getPos_y());
                 }
 
-                if(matou)
-                    jogador.setOuro(inimigos[i].getOuroInimigo());
+                if(morteiros[i].getProjetil_dy() < 0)
+                    al_draw_filled_circle(morteiros[i].getPos_x()+40, morteiros[i].getProjetil_pos_y(), 12, al_map_rgb(10,10,10));
+            
+                if(morteiros[i].getProjetil_dy() > 0)
+                    al_draw_filled_circle(inimigos[morteiros[i].getIndice_alvo()].get_posX()+40, morteiros[i].getProjetil_pos_y(), 12, al_map_rgb(10,10,10));
+                morteiros[i].incrementar_pos_y_projetil();   
             }
         }
+    }
 }
 
 //===============================
@@ -213,6 +232,7 @@ int inicializar_allegro()
         std::cout << "Falha ao carregar Allegro" << std::endl;
         return 0;
     }
+
     //SOM_ADDON======================
     al_install_audio();
     al_init_acodec_addon();
@@ -240,12 +260,6 @@ int inicializar_allegro()
     if(!al_install_mouse())
     {
         std::cout << "Falha ao iniciar o mouse" << std::endl;
-        return 0;
-    }
-
-    if(!al_install_keyboard())
-    {
-        std::cout << "Falha ao iniciar o teclado" << std::endl;
         return 0;
     }
 
@@ -280,6 +294,7 @@ int inicializar_allegro()
     }
     
     //===============================
+
     //SOM============================
     trilha_sonora = al_load_sample("imagem/Trilha_sonora.wav");
     if(!trilha_sonora){
@@ -293,12 +308,14 @@ int inicializar_allegro()
     al_set_sample_instance_playmode(inst_trilha_sonora, ALLEGRO_PLAYMODE_LOOP);
     al_set_sample_instance_gain(inst_trilha_sonora, 0.8);
     //===============================
+
     //MENU===========================
     menu = al_load_bitmap("Menu_bmp.bmp");
     if(!menu){
         std::cout << "Faha ao carregar menu!" << std::endl;
     }
     //===============================
+
     mapa = al_load_bitmap("imagem/Mapa_Final_p.bmp");
     if(!mapa) {
         std::cout << "Falha ao carregar o mapa!" << std::endl;
@@ -306,6 +323,13 @@ int inicializar_allegro()
         return 0;
     }
     al_draw_bitmap(mapa,0,0,0);
+
+    tela_game_over = al_load_bitmap("imagem/GameOver.bmp");
+    if(!tela_game_over) {
+        std::cout << "Falha ao carregar tela_game_over!" << std::endl;
+        al_destroy_display(display);
+        return 0;
+    }
 
     fundo_loja = al_load_bitmap("imagem/fundo_loja.bmp");
     if(!fundo_loja) {
@@ -369,6 +393,13 @@ int inicializar_allegro()
         return 0;
     }
 
+    score_jogador = al_load_font("arial.ttf", 36, 0);
+    if(!score_jogador) {
+        std::cout << "Falha ao carregar score_jogador!" << std::endl;
+        al_destroy_display(display);
+        return 0;
+    }
+
     event_queue = al_create_event_queue();
     if(!event_queue)
     {
@@ -381,7 +412,6 @@ int inicializar_allegro()
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_register_event_source(event_queue, al_get_mouse_event_source());
-    al_register_event_source(event_queue, al_get_keyboard_event_source());
 
     al_clear_to_color(al_map_rgb(0,0,0));
     //al_hide_mouse_cursor(display);
@@ -420,7 +450,10 @@ int main() {
 			}
         }
         if(jogador.getVida() == 0){
-            std::cout << "game over!" << std::endl;
+            al_draw_bitmap(tela_game_over,0,0,0);
+            al_draw_textf(score_jogador, al_map_rgb(255,255,255), 580, 292, 0, "%d", jogador.getScore());
+            al_flip_display();
+            al_rest(5);
             sair = true;
         }
         if(ev.type == ALLEGRO_EVENT_TIMER && enter == 1) {
@@ -460,7 +493,7 @@ int main() {
 
             else if(ev.mouse.button && pos_x_icone_morteiro<=cursor_x &&
             cursor_x<= pos_x_icone_morteiro+140 && pos_y_icone_morteiro<=cursor_y &&
-            cursor_y<=pos_y_icone_morteiro+190 && jogador.isPossivel(200))
+            cursor_y<=pos_y_icone_morteiro+190 && jogador.isPossivel(Morteiro::_preco))
             {
                 arrastar_morteiro = true;
             }
@@ -490,6 +523,7 @@ int main() {
                 {
                     morteiros[num_morteiros].setPos_x(cursor_x-(morteiro_x_size/2));
                     morteiros[num_morteiros].setPos_y(cursor_y-(morteiro_y_size/2));
+                    morteiros[num_morteiros].setProjetil_pos_y(cursor_y-(morteiro_y_size/2));
                     jogador.pagar(morteiros[num_morteiros].getPreco());
                     num_morteiros++;
                 }
@@ -515,7 +549,7 @@ int main() {
             al_flip_display();
         }
     }
-    
+
     al_destroy_bitmap(mapa);
     al_destroy_bitmap(fundo_loja);
     al_destroy_bitmap(enemy);
@@ -525,8 +559,10 @@ int main() {
     al_destroy_bitmap(morteiro);
     al_destroy_bitmap(jogador_HUD);
     al_destroy_bitmap(menu);
+    al_destroy_bitmap(tela_game_over);
     al_destroy_font(vida_jogador);
     al_destroy_font(ouro_jogador);
+    al_destroy_font(score_jogador);
     al_destroy_timer(timer);
     al_destroy_display(display);
     al_destroy_event_queue(event_queue);

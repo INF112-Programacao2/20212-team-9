@@ -16,10 +16,6 @@ public:
     //Setters
     void setPos_x(int pos_x);
     void setPos_y(int pos_y);
-    //Outros
-    //virtual void selecionar_alvo(Inimigo inimigos[], int num_inimigos) override;
-    //virtual void atirar(Inimigo inimigos[], bool &matou) override;
-
 };
 
 #endif

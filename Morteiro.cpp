@@ -13,19 +13,33 @@ int Morteiro::getDano(){
     return _dano;
 }
 
-bool Morteiro::is_possivel_comprar(int ouro) {
-    if(ouro >= _preco)
-        return true;
-    else
-        return false;
+bool Morteiro::isProjetil_subindo() {
+    return _projetil_subindo;
+}
+
+void Morteiro::set_projetil_subindo(bool a) {
+    _projetil_subindo = a;
+}
+
+
+int Morteiro::getProjetil_dy() {
+    return _projetil_dy;
+}
+
+void Morteiro::inverter_Projetil_dy() {
+    _projetil_dy *= -1;
 }
 
 int Morteiro::getProjetil_pos_y() {
     return _projetil_pos_y;
 }
 
-void Morteiro::incrementar_pos_y_projetil(int num) {
-    _projetil_pos_y += num;
+void Morteiro::setProjetil_pos_y(int y) {
+    _projetil_pos_y = y;
+}
+
+void Morteiro::incrementar_pos_y_projetil() {
+    _projetil_pos_y += _projetil_dy;
 }
 
 void Morteiro::selecionar_alvo(Inimigo inimigos[], int num_inimigos){
@@ -33,8 +47,8 @@ void Morteiro::selecionar_alvo(Inimigo inimigos[], int num_inimigos){
     bool tem_alvo = false;
     for(int i = 0; i<num_inimigos; i++)
     {
-        distancia = ((_pos_x+41)-inimigos[i].get_posX())*((_pos_x+41)-inimigos[i].get_posX()) + 
-        ((_pos_y+104)-inimigos[i].get_posY())*((_pos_y+104)-inimigos[i].get_posY());
+        distancia = ((_pos_x+38)-inimigos[i].get_posX())*((_pos_x+38)-inimigos[i].get_posX()) + 
+        ((_pos_y+40)-inimigos[i].get_posY())*((_pos_y+40)-inimigos[i].get_posY());
 
         if(!inimigos[i].isMorto() && distancia<=(_alcance*_alcance))
         {

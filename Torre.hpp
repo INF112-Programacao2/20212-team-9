@@ -6,8 +6,6 @@
 
 class Torre : public Defesa {
 private:
-    //static const int _preco = 100;
-    //static const int _alcance = 200;
     static const int _dano = 10;
 public:
     static const int _preco = 100;
@@ -15,7 +13,6 @@ public:
     int getPreco();
     int getAlcance();
     int getDano();
-    bool is_possivel_comprar(int ouro);
     void selecionar_alvo(Inimigo inimigos[], int num_inimigos);
     void atirar(Inimigo inimigos[], bool &matou);
 };
