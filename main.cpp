@@ -33,6 +33,7 @@ ALLEGRO_BITMAP *enemy = NULL;
 ALLEGRO_BITMAP *mapa = NULL;
 ALLEGRO_BITMAP *menu = NULL;
 ALLEGRO_BITMAP *tela_game_over = NULL;
+ALLEGRO_BITMAP *cursor = NULL;
 
 int controle_vida = 0;
 int enter = 0;
@@ -316,6 +317,14 @@ int inicializar_allegro()
     }
     //===============================
 
+    cursor = al_load_bitmap("assets/cursor.bmp");
+    if(!cursor) {
+        std::cout << "Falha ao carregar o cursor!" << std::endl;
+        al_destroy_display(display);
+        return 0;
+    }
+    al_convert_mask_to_alpha(cursor, al_map_rgb(255, 255, 255));
+
     mapa = al_load_bitmap("assets/Mapa_Final_p.bmp");
     if(!mapa) {
         std::cout << "Falha ao carregar o mapa!" << std::endl;
@@ -414,7 +423,6 @@ int inicializar_allegro()
     al_register_event_source(event_queue, al_get_mouse_event_source());
 
     al_clear_to_color(al_map_rgb(0,0,0));
-    //al_hide_mouse_cursor(display);
     al_flip_display();
     al_start_timer(timer);
 
@@ -450,6 +458,7 @@ int main() {
 			}
         }
         if(jogador.getVida() == 0){
+            al_show_mouse_cursor(display);
             al_draw_bitmap(tela_game_over,0,0,0);
             al_draw_textf(score_jogador, al_map_rgb(255,255,255), 580, 292, 0, "%d", jogador.getScore());
             al_flip_display();
@@ -535,9 +544,11 @@ int main() {
             redraw = false;
             al_clear_to_color(al_map_rgb(0,0,0));
             if(enter == 0){
-                desenhar_menu();
+                //desenhar_menu();
+                al_draw_bitmap(menu, 0, 0, 0);
                 al_flip_display();
             }else{
+                al_hide_mouse_cursor(display);
                 al_play_sample_instance(inst_trilha_sonora);
                 al_draw_bitmap(mapa,0,0,0);
                 desenhar_loja();
@@ -545,12 +556,14 @@ int main() {
                 desenhar_defesas();
                 desenhar_HUD();
                 atirar_projeteis(num_frames);
+                al_draw_bitmap(cursor,cursor_x,cursor_y,0);
             }
             al_flip_display();
         }
     }
 
     al_destroy_bitmap(mapa);
+    al_destroy_bitmap(cursor);
     al_destroy_bitmap(fundo_loja);
     al_destroy_bitmap(enemy);
     al_destroy_bitmap(icone_torre);
