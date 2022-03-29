@@ -85,7 +85,7 @@ void desenhar_HUD()
 }
 
 //ENEMY==========================
-Inimigo inimigos[30];
+Inimigo inimigos[150];
 int num_inimigos = 5;
 
 void libera_inimigo(Inimigo inimigos[], int num_enemy);
@@ -439,10 +439,10 @@ int main() {
             num_inimigos = 10;
         }
         else if(num_torres + num_morteiros > 7 && num_torres + num_morteiros < 10){
-            num_inimigos = 20;
+            num_inimigos = 20 ;
         }
         else if(num_torres + num_morteiros >= 10){
-            num_inimigos = 30;
+            num_inimigos = 20 + num_morteiros*2;
         }
         if(ev.type == ALLEGRO_EVENT_KEY_DOWN){
 			if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
