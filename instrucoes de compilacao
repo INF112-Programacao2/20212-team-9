@@ -1,5 +1,5 @@
 na pasta do jogo:
-g++ main_loja.cpp jogador.cpp morteiro.cpp defesa.cpp torre.cpp inimigo.cpp -I "caminho da pasta include do mingw" -lallegro -lallegro_image -lallegro_primitives -lallegro_ttf -lallegro_font -lallegro_audio -lallegro_acodec -o main_loja
+g++ main.cpp jogador.cpp morteiro.cpp defesa.cpp torre.cpp inimigo.cpp -I "caminho da pasta include do mingw" -lallegro -lallegro_image -lallegro_primitives -lallegro_ttf -lallegro_font -lallegro_audio -lallegro_acodec -o main
 passar os cabecalhos das bibliotecas:
   -<allegro5/allegro_audio.h>
   -<allegro5/allegro_acodec.h>
