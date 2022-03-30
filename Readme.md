@@ -13,7 +13,7 @@
 </h1>
 <h2>Deve ser digitado no terminal ou cmd, dentro da pasta src:</h2>
 <p>
-g++ main.cpp jogador.cpp morteiro.cpp defesa.cpp torre.cpp inimigo.cpp -I "caminho da pasta include do mingw" -lallegro -lallegro_image -lallegro_primitives -lallegro_ttf -lallegro_font -lallegro_audio -lallegro_acodec 
+g++ main.cpp jogador.cpp morteiro.cpp defesa.cpp torre.cpp inimigo.cpp -I "caminho da pasta include do mingw(em caso de compilação no windows)" -lallegro -lallegro_image -lallegro_primitives -lallegro_ttf -lallegro_font -lallegro_audio -lallegro_acodec 
 </p>
 </div>
 <h2>Integrantes</h2>
