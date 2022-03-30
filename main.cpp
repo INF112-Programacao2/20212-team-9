@@ -186,8 +186,6 @@ void atirar_projeteis(int num_frames)
     if(num_morteiros != 0)
     {
         bool matou;
-        int distancia;
-        int pos1, pos2;
         for(int i=0; i<num_morteiros; i++)
         {
             matou = false;
