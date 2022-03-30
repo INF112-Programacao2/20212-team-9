@@ -7,4 +7,4 @@ passar os cabecalhos das bibliotecas:
   -<allegro5/allegro_primitives.h>
   -<allegro5/allegro_ttf.h>
   -<allegro5/allegro_font.h>
-  pro mingw;
+  para o mingw;
