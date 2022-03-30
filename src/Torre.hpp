@@ -1,23 +1,20 @@
 #ifndef TORRE_HPP
 #define TORRE_HPP
+#include "Jogador.hpp"
+#include "Inimigo.hpp"
+#include "Defesa.h"
 
-class Torre
-{
+class Torre : public Defesa {
 private:
-    int _dano;
-    int _preco;
-    int _tipo;
-    int _pos_x;
-    int _pos_y;
-
+    static const int _dano = 10;
 public:
-    Torre(int dano, int preco, int tipo, int pos_x, int pos_y);
-    ~Torre();
-    int getDano();
+    static const int _preco = 100;
+    static const int _alcance = 170;
     int getPreco();
-    int getTipo();
-    int getPos_x();
-    int getPos_y();
+    int getAlcance();
+    int getDano();
+    void selecionar_alvo(Inimigo inimigos[], int num_inimigos);
+    void atirar(Inimigo inimigos[], bool &matou);
 };
 
 #endif

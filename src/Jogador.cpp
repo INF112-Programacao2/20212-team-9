@@ -22,11 +22,22 @@ int Jogador::getOuro() {
     return _ouro;
 }
 
+int Jogador::getScore() {
+    return _score;
+}
+
+void Jogador::setOuro(){
+    _ouro += 0;
+}
 void Jogador::setOuro(int ouroInimigo) {
     _ouro += ouroInimigo;
 }
 
-void Jogador::setPagar(int preco) {
+void Jogador::ganharScore() {
+    _score += 100;
+}
+
+void Jogador::pagar(int preco) {
     _ouro -= preco;
 }
 

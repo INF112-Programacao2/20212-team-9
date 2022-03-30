@@ -1,5 +1,5 @@
 #include "Inimigo.hpp"
-
+/*
 Inimigo::~Inimigo() = default;
 
 Inimigo::Inimigo(int vidaInimigo, int velocidadeInimigo, int ouroInimigo, int tipoInimigo) {
@@ -8,7 +8,7 @@ Inimigo::Inimigo(int vidaInimigo, int velocidadeInimigo, int ouroInimigo, int ti
     this -> _ouroInimigo = ouroInimigo;
     this -> _tipoInimigo = tipoInimigo;
 }
-
+*/
 int Inimigo::getOuroInimigo(){
     return _ouroInimigo;
 }
@@ -29,7 +29,7 @@ void Inimigo::tomaDano(int dano){
     //dano da torre - vida do inimigo
     _vidaInimigo -= dano;
 }
-
+//mexer aqui****
 bool Inimigo::isMorto(){
     if(_vidaInimigo <= 0)
         return true;
@@ -50,4 +50,22 @@ void Inimigo::mover(int ponto, int ponto2){
     else if(_posX >= ponto && _posY == ponto2){
         _posX++;
     }
+}
+int Inimigo::get_posX(){
+    return this->_posX;
+}
+int Inimigo::get_posY(){
+    return this->_posY;
+}
+void Inimigo::set_posX(){
+    this->_posX += 2;//getVelocidadeInimigo();
+}
+void Inimigo::set_posY(){
+    this->_posY += 2;//getVelocidadeInimigo();
+}
+
+bool Inimigo::reset_pos(){
+    this->_posX = 0;
+    this->_posY = 246;
+    this->_vidaInimigo = 50;
 }

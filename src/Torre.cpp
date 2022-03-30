@@ -1,32 +1,42 @@
 #include <iostream>
 #include "Torre.hpp"
 
-Torre::~Torre() = default;
+int Torre::getPreco(){
+    return _preco;
+}
 
-Torre::Torre(int dano, int preco, int tipo, int pos_x, int pos_y){
-    this -> _dano = dano;
-    this -> _preco = preco;
-    this -> _tipo = tipo;
-    this -> _pos_x = pos_x;
-    this -> _pos_y = pos_y;
+int Torre::getAlcance(){
+    return _alcance;
 }
 
 int Torre::getDano(){
     return _dano;
 }
 
-int Torre::getPreco(){
-    return _preco;
+void Torre::selecionar_alvo(Inimigo inimigos[], int num_inimigos){
+    int distancia;
+    bool tem_alvo = false;
+    for(int i = 0; i<num_inimigos; i++)
+    {
+        distancia = ((_pos_x+35)-inimigos[i].get_posX())*((_pos_x+35)-inimigos[i].get_posX()) + 
+        ((_pos_y+80)-inimigos[i].get_posY())*((_pos_y+80)-inimigos[i].get_posY());
+
+        if(!inimigos[i].isMorto() && distancia<=(_alcance*_alcance))
+        {
+            tem_alvo = true;
+            _indice_do_alvo = i;
+            break;
+        }
+    }
+    if(!tem_alvo)
+        _indice_do_alvo = -1;
 }
 
-int Torre::getTipo(){
-    return _tipo;
-}
-
-int Torre::getPos_x(){
-    return _pos_x;
-}
-
-int Torre::getPos_y(){
-    return _pos_y;
+void Torre::atirar(Inimigo inimigos[], bool &matou){
+    if(_indice_do_alvo != -1)
+    {
+        if(inimigos[_indice_do_alvo].getVidaInimigo() - _dano <= 0)
+                matou = true;
+        inimigos[_indice_do_alvo].tomaDano(_dano);
+    }
 }
