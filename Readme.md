@@ -5,7 +5,7 @@
 	Esse é um projeto de um jogo Tower Defense em C++ utilizando a biblioteca Allegro para o projeto final da disciplina INF 112 da Universidade Federal de Viçosa.
 </p>
 <div align="center">
-	<img src="./assets/Menu_bmp.bmp" width="400px" height="300px"/>
+	<img src="./src/assets/Menu_bmp.bmp" width="400px" height="300px"/>
 </div>
 <div>
 <h1 align="center">
